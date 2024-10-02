@@ -1,0 +1,38 @@
+#
+# Configuration file for CS6378 Project 1
+#
+# As per the "shell" convention, anything following a hash sign is a comment and should be ignored. The 
+# configuration file shall not exceed 100 Kb in size. The configuration file consists of 3 sections. Each section
+# is delimited by one or more blank lines. The first section configures the number of nodes in the system. The
+# second section configures the hostname of the nodes and the ports on which the nodes will listen for incoming
+# connections. The third section contains a list of tokens and the paths which they are required to use to
+# traverse through the system.
+#
+#
+# Number of nodes and netID
+#
+4 6 10 100 2000 100
+#
+0 dc01 30234 #
+1 dc02 30345
+2 dc03 30234 #
+3 dc04 30234 #
+#4 dc05 30234 #
+#5 dc06 30234 #
+#6 dc07 30345
+#7 dc08 30345
+#8 dc09 30345
+#9 dc10 30345
+#
+1
+2
+3
+#4
+#5
+#6
+#7
+#8
+#9
+2
+#0 2
+#

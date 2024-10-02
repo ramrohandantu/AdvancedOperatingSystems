@@ -26,7 +26,7 @@ CONFIG=$cwd/$1
 #
 # Your main project class
 #
-PROG=$cwd/Project1
+PROG=$cwd/Project2
 
 n=0
 
@@ -45,7 +45,7 @@ cat $CONFIG | sed -e "s/#.*//" | sed -e "/^\s*$/d" |
 	echo $host
 	port=$( echo $line | awk '{ print $3 }' )
 	echo $port
-	ssh -l "$netid" "$host" "cd $PROJDIR;java Project1 $n $port $nodes $host1 $CONFIG" &
+	ssh -l "$netid" "$host" "cd $PROJDIR;java Project2 $n $port $nodes $host1 $CONFIG" &
         n=$(( n + 1 ))
     done
 )

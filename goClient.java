@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
-
+import java.util.concurrent.*;
 
 public class goClient implements Runnable{
 	private Thread t;
@@ -9,7 +9,7 @@ public class goClient implements Runnable{
 	private int port;
 	private String dcXX;
 	private String packet;
-	
+	private BlockingQueue<String> sendQueue;
 	
 	public void setThreadName(String name)
 	{
@@ -27,20 +27,22 @@ public class goClient implements Runnable{
 		this.dcXX = dc;
 	}
 
-	public void setPacket(String pkt)
+	public void setSend(BlockingQueue<String> queue)
 	{
-		this.packet = pkt;
+		this.sendQueue = queue;
 	}
 
 	public void run(){
 		System.out.println("Running: "+threadName);
 		try{
-			String message;
+			//String message;
 			//Create a client socket and connect to server at predefined port as per config file
 			
 			//Socket clientSocket = new Socket(dcXX,port);   // change 127 to net05
 			Socket clientSocket;
 			PrintWriter send;
+			//clientSocket = new Socket(dcXX,port);
+			//send = new PrintWriter(clientSocket.getOutputStream(),true);
 			boolean scanning = true;
 			while(scanning)
 			{
@@ -50,11 +52,15 @@ public class goClient implements Runnable{
 					clientSocket = new Socket(dcXX,port);
 					send = new PrintWriter(clientSocket.getOutputStream(),true);
 					//System.out.println("pkt"+this.packet);
-					send.println(packet);
-					//send.println(threadName);
-					send.close();
-					clientSocket.close();
-					scanning=false;
+
+					//proj2
+					String message;
+					while(true){
+						while((message = sendQueue.poll())!=null){
+							System.out.println("Sending: at nodeId "+dcXX +" "+message);
+							send.println(message);
+						}
+					}
 				}
 				catch(ConnectException e)
 				{
@@ -80,7 +86,7 @@ public class goClient implements Runnable{
 		{
 			ex.printStackTrace();
 		}//catch(InterruptedException e){
-		System.out.println("Thread: "+threadName+" Exiting");
+		//System.out.println("Thread: "+threadName+" Exiting");
 	}
 	
 	public void start(){

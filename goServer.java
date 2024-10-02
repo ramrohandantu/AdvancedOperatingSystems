@@ -1,23 +1,26 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 public class goServer implements Runnable{
 	private Thread t;
 	private String threadName;
 	private int port;
 	private int nodeId;
-	private int random;
-	private String conf;
-	private BufferedWriter bw=null;
+	//private int random;
+	//private String conf;
+	//private BufferedWriter bw=null;
+	private BlockingQueue<String> recvQueue;
 	
-	public goServer(String name, int prt, int node, int rand, BufferedWriter bw, String cf){
-		this.bw = bw;
+	public goServer(String name, int prt, int node, BlockingQueue<String> queue){
+		//this.bw = bw;
 		this.threadName = name;
 		this.port = prt;
 		this.nodeId = node;
-		this.random = rand;
-		this.conf = cf;
+		//this.random = rand;
+		//this.conf = cf;
+		this.recvQueue = queue;
 		System.out.println("Creating: "+threadName);
 	}
 	
@@ -45,7 +48,7 @@ public class goServer implements Runnable{
 				}catch(IOException ex){
 					ex.printStackTrace();
 				}
-				new Thread(new goWorker("WorkerThread"+nodeId, random, clientSocket, nodeId, bw, conf)).start();
+				new Thread(new goListener("ListenerThread"+nodeId, clientSocket, nodeId, recvQueue)).start();
 			}
 		}catch(IOException ex1){
 			ex1.printStackTrace();
